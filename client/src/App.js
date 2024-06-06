@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Sidebar from './components/sidebar.jsx'
+import Admin from './components/Admin.jsx'
 
 export default function App() {
 
   return (
     <div>
-      <Sidebar />
+      <Admin />
     </div>
   )
 }
