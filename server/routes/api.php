@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['check.api.token'])->group(function () {
+
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+        Route::get('/Hello', function (Request $request) {
+            return response()->json("hello");
+        });
+        
+});
+
+    Route::get('/protected-route', function () {
+        return response()->json(['message' => 'You have access']);
+    });
+
+    Route::controller(AuthController::class)->group(function(){
+        Route::post('/login','login');
+        Route::post('/register','register');
+    });
+
 });
