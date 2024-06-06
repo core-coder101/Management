@@ -11,6 +11,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'userName' => 'required',
@@ -27,7 +28,7 @@ class AuthController extends Controller
             ];
             return response()->json($response, 400);
         }
-
+        if($request->role == "Admin"){
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = Admin::create($input);
@@ -41,6 +42,7 @@ class AuthController extends Controller
         ];
         return response()->json($response, 200);
     }
+}
 
 
 
@@ -49,6 +51,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        if($request->role == "Admin"){
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             $admin = Auth::guard('admin')->user();
 
@@ -59,5 +62,6 @@ class AuthController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => 'NoLogin_Unauthorized'], 400);
         }
+    }
     }
 }
